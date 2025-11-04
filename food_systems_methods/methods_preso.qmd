@@ -6,6 +6,7 @@ date: '2025-11-05'
 date-format: long
 format:
   revealjs:
+    math: katex
     theme: styles.scss
     logo: assets/uvm_logo.png
     embed-resources: true
@@ -201,7 +202,10 @@ fig.show()
 :::
 
 ::: {.column width = '60%'}
-<img src="assets/effect_size.png" class="centered">
+<figure>
+  <img src="assets/effect_size.png" class="centered" style="width: 100%; border: 2px solid #000;">
+  <figcaption></figcaption>
+</figure>
 :::
 
 </div>
@@ -212,15 +216,12 @@ fig.show()
 <div class="v-centered">
 
 ::: {.column width = "40%"}
-
 - How to Lie With Statistics [@huff1993HowLieStatistics]
 - [@lo2022MisinformedVisualizationWhat]
-
 ::: 
 
 ::: {.column width = "60%"}
-
-<div class="centered">
+<div class="centered" style="width: 100%;">
 
 ```{python}
 #| label: misleading_viz
@@ -268,11 +269,8 @@ plt.show()
 ```
 
 </div>
-
 :::
-
 </div>
-
 ::::
 
 ::: {.notes}
@@ -357,8 +355,39 @@ Not to mention:
 
 ## Methods
 
+::: {.column width = "50%"}
+- Data sources
+  - USDA: NASS, ERS, USFS
+  - BLS
+  - Census Bureau
+- Analyses
+  - Spatial regression. Why error and not lag
+:::
+
+::: {.column width = "50%"}
+
+$$
+Y = mx + b
+$$
+
+:::
+
 ## Results
 
+- Graph options
+  - Indicators over time
+  - Correlation matrix (probably not)
+  - Trends
+- Probably do indicators over time
+- Lack of social indicators
+
+
 ## Discussion
+
+- Value in monitoring
+- Social data
+- Open, FAIR, easily accessible
+- What are data good and not good for
+
 
 ## References
