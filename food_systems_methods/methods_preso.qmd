@@ -6,7 +6,7 @@ date: '2025-11-05'
 date-format: long
 format:
   revealjs:
-    theme: methods.scss
+    theme: styles.scss
     logo: assets/uvm_logo.png
     embed-resources: true
     # code-fold: true
@@ -36,30 +36,60 @@ include-in-header:
      </style>
 ---
 
-## Quantitative Methods {.smaller}
+## Outline
+
+1. Quant methods, what they are good for and what they aren't
+2. Things I wish someone told me earlier
+3. Food Systems Secondary Data Survey
+
+# Quantitative Methods in Food Systems
+
+## Quantitative Methods in Food Systems {.smaller}
 
 <div class="v-centered">
 
-::: {.column width = '50%'}
-- What are they good for
-- What are they not good for
-- Standard toolkit
-  - Regression and friends
-- building on that
-  - directed acyclic graphs
-  - structural equation model
-- system modeling:
-  - fuzzy cognitive mapping
-  - agent-based
-  - system dynamics
-- bayesian methods
+::: {.column width = '55%'}
+- Old friends
+  - T-test
+  - ANOVA
+  - Regression
+- Broader frameworks
+  - Dimension reduction
+  - Factor analysis
+  - Structural equation model
+- System modeling
+  - Fuzzy cognitive mapping
+  - Network
+  - Agent-based
+  - System dynamics
 :::
 
-::: {.column width = '50%'}
-![Intervale Farm, Sally McCay, UVM Photo](assets/intervale_small.png){class="centered" fig-alt="A picture of a field at Intervale Farm."}
+::: {.column width = '45%'}
+<figure>
+  <img src="assets/mui_models.png" alt="Description of image" style="width: 100%; border: 2px solid #000;">
+  <figcaption>Models identified from a review of studies on retail food environments [@mui2025SimulatedRetailFood]</figcaption>
+</figure>
+
+<figure>
+  <img src="assets/monasterolo_acsm.png" alt="Description of image" style="width: 100%; border: 2px solid #000;">
+  <figcaption>Share of publications over time in Agricultural complex system modeling [@monasterolo2016SustainableInclusiveFood]</figcaption>
+</figure>
 :::
 
 </div>
+
+::: {.notes}
+- Good for: differences, trends, dimension reduction, exploratory work.
+  - System modeling - prediction, intervention, counterfactual
+- Bad for: 
+  - VERY hard to infer causation.
+- John Stuart Mill on causation: 
+  - Cause precede effect
+  - Reasonable mechanism (correlation)
+  - No other plausible explanation
+- Hand in hand with qualitative work
+:::
+
 
 ## (Mis-)Interpreting Quantitative Results {.smaller}
 
@@ -79,17 +109,6 @@ include-in-header:
 :::
 
 </div>
-
-### Confounders
-
-::: {.column width = '50%'}
-- Berksen's paradox
-- Image of a DAG, chain collider 
-:::
-
-::: {.column width = '50%'}
-![Intervale Farm, Sally McCay, UVM Photo](assets/intervale_small.png){class="centered" fig-alt="A picture of a field at Intervale Farm."}
-:::
 
 ### Confidence Intervals
 
@@ -171,66 +190,175 @@ fig.show()
 
 </div>
 
+
 ### Effect Size
 
 <div class="v-centered">
 
-::: {.column width = '30%'}
+::: {.column width = '40%'}
 - Illusion of Predictability in Scientific Results [@zhang2023IllusionPredictabilityScientific]
 - <a href="https://sam.zhang.fyi/html/psup/index.html" target="_blank">What is the effect size?</a>
 :::
 
-::: {.column width = '70%'}
-<iframe src="https://sam.zhang.fyi/html/psup/index.html" height="500px" width="100%"></iframe>
+::: {.column width = '60%'}
+<img src="assets/effect_size.png" class="centered">
 :::
 
 </div>
 
+
 ### Data Visualization
 
-::: {.column width = '30%'}
-- People misunderstand graphs
+<div class="v-centered">
+
+::: {.column width = "40%"}
+
+- How to Lie With Statistics [@huff1993HowLieStatistics]
+- [@lo2022MisinformedVisualizationWhat]
+
+::: 
+
+::: {.column width = "60%"}
+
+<div class="centered">
+
+```{python}
+#| label: misleading_viz
+import matplotlib.pyplot as plt
+import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
+
+colors = ['#076678', '#9d0006', '#fabd2f', '#e851e3ff', '#167124ff']
+
+fig, axes = plt.subplots(1, 3, figsize=(12, 3))
+
+# pie chart
+sizes = [20, 19, 21, 22, 18]
+labels = ['A', 'B', 'C', 'D', 'E']
+axes[0].pie(
+    sizes,
+    labels=labels,
+    colors=colors
+)
+axes[0].set_title('Pie Chart', fontsize=16)
+
+# truncated
+categories = ['Product A', 'Product B']
+values = [100, 105]
+axes[1].bar(categories, values, color=colors[0:2])
+axes[1].set_ylim(95, 110)
+axes[1].set_ylabel('Sales')
+axes[1].set_title('Bar Chart', fontsize=16)
+
+# 3d bar chart
+ax3d = fig.add_subplot(133, projection='3d')
+x = np.array([0, 1])
+y = np.array([0, 0])
+z = np.array([0, 0])
+dx = np.array([0.5, 0.5])
+dy = np.array([0.5, 0.5])
+dz = np.array([50, 55])
+ax3d.bar3d(x, y, z, dx, dy, dz, color=colors[0:2])
+ax3d.set_title('3D Chart', fontsize=16)
+ax3d.set_xticks([0.25, 1.25])
+ax3d.set_xticklabels(['X', 'Y'])
+ax3d.set_zlabel('Value')
+
+plt.show()
+```
+
+</div>
+
 :::
 
-::: {.column width = '70%'}
-```{r}
-plot(iris)
-```
-:::
+</div>
 
 ::::
 
+::: {.notes}
+Not to mention:
+- Confounders - control for them, but not the wrong ones. Berksens paradox
+- Simpson's paradox
+- Statistics and eugenics
+  - Galton: Founder of eugenics movement, coined term
+  - Fisher: First chair of eugenics society, University of Cambridge. Galton Professor of Eugenics at Universty College London. Also cigarettes - correlation is not causation
+:::
 
-## Approaching a Quantitative Analysis {.smaller}
+## Things I wish someone told me earlier {.smaller}
 
 ::: {.panel-tabset}
 
-### Plan Ahead
 
-- Power, sample size, outliers, analyses
-- Think many analyses
-- consider preregistration
-- DAGs asnd Berksen
+### Planning Ahead
+
+- Whiteboard exercise
+- Think through:
+  - Power, sample size, outliers
+- Consider preregistration
+
+::: {.notes}
+- Planning ahead
+  - Whiteboard - DAGs and Berksen's paradox
+  - Who knows what pre-registration is?
+:::
+
 
 ### Choosing Tools
 
+- GUI vs scripting
+- R, Python, Julia, others
+- Open source
+- Free (both ways)
 - 
 
-### EDA
 
-- do it
-- distributional assumptions
-- missing data, unknown trends
-
-### Reproducibility
-
-- Reproducibility
-- Version Control
-
-### Version Control
+### Exploratory Data Analysis
 
 - Do it
+- Get to know your data
+- Distributional assumptions
+- Missing data
+
+::: {.notes}
+- EDA
+  - Get to know your data
+    - Juvenile detention example
+    - Words in survey example
+    - Missing data example
+:::
+
+
+### Reproducibility 
+
+- Reproducibility
+- Basically Git
+
+- Add the comic
+
+### Getting Help
+
+- Maria S. at the library
+- DataCamp, other online tools
+- Use AI scrupulously 
+- Each other!
 
 :::
+
+## Closing thoughts on Quant things
+
+- Participatory modeling
+  - FCM, Community system dynamics
+- Even if you're not going to do quant analysis, you have to know enough to critically consume
+
+
+# Data Survey Title Slide? {.centered-section}
+
+## Intro
+
+## Methods
+
+## Results
+
+## Discussion
 
 ## References
