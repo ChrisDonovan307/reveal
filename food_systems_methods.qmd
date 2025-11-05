@@ -1,0 +1,675 @@
+---
+title: "Quantitative Methods for Food Systems Research"
+author: "Chris Donovan"
+institute: "Food Systems Data Scientist<br>Food Systems Research Institute"
+date: '2025-11-05'
+date-format: long
+format:
+  revealjs:
+    theme: styles.scss
+    logo: assets/uvm_logo.png
+    embed-resources: true
+    incremental: true
+    revealjs-plugins:
+      - revealjs-text-resizer
+    filters:
+      - show-lang.lua
+engine: jupyter
+execute:
+    daemon: false
+editor:
+  markdown:
+    wrap: 72
+bibliography: assets/bib.bib
+citations-hover: true
+citeproc: true
+include-in-header:
+ - text: |
+     <style>
+     #title-slide .title {
+       font-size: 2em;
+     }
+     </style>
+---
+
+## Outline
+
+<div class="v-centered">
+
+1. Quantitative Methods in Food Systems
+2. Approaching Quantitative Analyses
+3. Food Systems Data Survey
+
+</div>
+
+
+# 1. Quantitative Methods in Food Systems {.smaller .centered-section}
+
+
+## Common Modeling Frameworks {.smaller}
+
+<div class="v-centered">
+
+::: {.column width = '55%'}
+- Old friends
+  - T-test
+  - ANOVA
+  - Regression
+- Broader frameworks
+  - Dimension reduction
+  - Factor analysis
+  - Structural equation model
+- System modeling
+  - Fuzzy cognitive mapping
+  - Network
+  - Agent-based
+  - System dynamics
+- Where are they good for?
+- Where are they limited?
+:::
+
+::: {.column width = '45%'}
+<figure>
+  <img src="assets/mui_models.png" alt="Description of image" style="width: 100%; border: 2px solid #000;">
+  <figcaption>Models identified from a review of studies on retail food environments [@mui2025SimulatedRetailFood]</figcaption>
+</figure>
+
+<figure>
+  <img src="assets/monasterolo_acsm.png" alt="Description of image" style="width: 100%; border: 2px solid #000;">
+  <figcaption>Share of publications over time in Agricultural complex system modeling [@monasterolo2016SustainableInclusiveFood]</figcaption>
+</figure>
+:::
+
+</div>
+
+::: {.notes}
+- Lots of ways to approach quant analysis
+- Good for: 
+  - Differences, trends, dimension reduction, exploratory work
+  - System modeling
+  - Emergent effects, thresholds, behavior, 
+  - prediction, intervention, counterfactual
+- Bad for:
+  - Transparency, interpretation
+  - VERY hard to infer causation.
+  - John Stuart Mill on causation: 
+    - Cause precede effect
+    - Reasonable mechanism (correlation)
+    - No other plausible explanation
+- They are still biased, biases are just baked in
+- Hand in hand with qualitative work - generation and testing
+:::
+
+
+## (Mis-)Use and (Mis-)Interpretation {.smaller}
+
+:::: {.panel-tabset}
+
+### Confidence Intervals
+
+<div class="v-centered">
+
+::: {.column width = '40%' .nonincremental}
+- What is a confidence interval?
+- How different is different enough? [@cumming2005InferenceEyeConfidence]
+:::
+
+::: {.column width = '60%'}
+<div class="centered">
+::: {.r-stack}
+::: {.fragment .fade-out fragment-index=0}
+
+```{python}
+#| label: confidence_intervals
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Example data
+x = ['Group 1', 'Group 2']
+y = [89, 45]
+ci = [24, 24]
+
+fig, ax = plt.subplots(figsize=(3, 4.5))
+
+# Create x positions for the groups
+x_pos = np.arange(len(x))
+
+# Plot points with error bars
+ax.errorbar(
+    x_pos, 
+    y, 
+    yerr=ci,
+    fmt='o',
+    markersize=9,
+    color='#076678',
+    ecolor='#076678',
+    capsize=12,
+    capthick=3.5,
+    linewidth=3
+)
+
+ax.set_xlim(-1, 2)
+ax.set_ylim(0, 120)
+ax.set_xticks(x_pos)
+ax.set_xticklabels(x)
+ax.set_ylabel('Dependent Variable')
+
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+
+plt.subplots_adjust(left=0.15, right=0.95, top=0.98, bottom=0.08)
+plt.show()
+```
+
+:::
+
+::: {.fragment .fade-in fragment-index=0}
+<img src="assets/cumming_ci_graph.png" style="height: 550px; border: 2px solid #000; display: inline-block;">
+:::
+
+:::
+
+</div>
+
+:::
+
+</div>
+
+
+### Effect Size
+
+<div class="v-centered">
+
+::: {.column width = '40%' .nonincremental}
+- Illusion of Predictability in Scientific Results [@zhang2023IllusionPredictabilityScientific]
+- <a href="https://sam.zhang.fyi/html/psup/index.html" target="_blank">What is the effect size?</a>
+:::
+
+::: {.column width = '60%'}
+<figure>
+  <img src="assets/effect_size.png" class="centered" style="width: 100%; border: 2px solid #000;">
+  <figcaption></figcaption>
+</figure>
+:::
+
+</div>
+
+
+### Data Visualization
+
+<div class="v-centered">
+
+::: {.column width = "40%" .nonincremental}
+- How to Lie With Statistics [@huff1993HowLieStatistics]
+- Taxonomy of issues in data visualization [@lo2022MisinformedVisualizationWhat]
+::: 
+
+::: {.column width = "60%"}
+<div class="centered" style="width: 100%;">
+
+```{python}
+#| label: misleading_viz
+import matplotlib.pyplot as plt
+import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
+
+colors = ['#076678', '#9d0006', '#fabd2f', '#e851e3ff', '#167124ff']
+
+fig, axes = plt.subplots(1, 3, figsize=(12, 3))
+
+# pie chart
+sizes = [20, 19, 21, 22, 18]
+labels = ['A', 'B', 'C', 'D', 'E']
+axes[0].pie(
+    sizes,
+    labels=labels,
+    colors=colors
+)
+axes[0].set_title('Pie Chart', fontsize=16)
+
+# truncated
+categories = ['Product A', 'Product B']
+values = [100, 105]
+axes[1].bar(categories, values, color=colors[0:2])
+axes[1].set_ylim(95, 110)
+axes[1].set_ylabel('Sales')
+axes[1].set_title('Bar Chart', fontsize=16)
+
+# 3d bar chart
+ax3d = fig.add_subplot(133, projection='3d')
+x = np.array([0, 1])
+y = np.array([0, 0])
+z = np.array([0, 0])
+dx = np.array([0.5, 0.5])
+dy = np.array([0.5, 0.5])
+dz = np.array([50, 55])
+ax3d.bar3d(x, y, z, dx, dy, dz, color=colors[0:2])
+ax3d.set_title('3D Chart', fontsize=16)
+ax3d.set_xticks([0.25, 1.25])
+ax3d.set_xticklabels(['X', 'Y'])
+ax3d.set_zlabel('Value')
+
+plt.show()
+```
+
+</div>
+
+:::
+
+</div>
+
+### P Values
+
+<div class="v-centered">
+
+::: {.column width = '55%'}
+* What is a p-value?
+* Example:
+  * You're studying whether payments for ecosystem services increase adoption of conservation agriculture practices
+  * Farms that received payments were significantly more likely to adopt $(p = 0.04)$
+  * What are the chances that PES has a causal effect on adoption?
+  * What are the chances that PES is significantly associated with adoption?
+* What it gives: chance of the data given the null hypothesis
+* What you want: chance of the null hypothesis given the data
+:::
+
+::: {.column style = "width: 45%; padding-left: 100px;"}
+::: {.fragment .fade-in}
+<figure>
+    <img src="assets/anderson.png" alt="Graph of p values and posteriors" style="width: 95%; border: 2px solid #000;">
+    <figcaption>Plot of p-values and posterior probabilities [@anderson2020MisinterpretingDiscrepancyValues]</figcaption>
+</figure>
+:::
+:::
+
+</div>
+
+::::
+
+::: {.notes}
+- P values
+  - What is a p value, what is it good for? What does it mean?
+  - It gives: chance of the data given the null
+  - We want: chance of the null given the data
+  - Can have significant p, chances are you're wrong!
+- Not to mention:
+  - Confounders - control for them, but not the wrong ones. Berksens paradox
+  - Simpson's paradox
+  - Statistics and eugenics
+    - Galton: Founder of eugenics movement, coined term
+    - Fisher: First chair of eugenics society, University of Cambridge. Galton Professor of Eugenics at Universty College London. Also cigarettes
+:::
+
+# 2. Approaching Quantitative Analyses {.centered-section}
+
+## Approaching Quantitative Analyses {.smaller}
+
+:::: {.panel-tabset}
+
+
+### Planning Ahead
+
+<div class="v-centered">
+
+::: {.column width = "50%"}
+- Think about:
+  - Power
+  - Sample size
+  - Outliers
+- Whiteboard exercise
+  - What other variables are relevant?
+  - Directed acyclic graph (DAG)
+- Consider preregistration [@nosek2018PreregistrationRevolution]
+:::
+
+::: {.column width = "50%"}
+<figure>
+  <img src="assets/dag.png" alt="Directed acyclic graph" style="width: 100%; border: 2px solid #000;">
+  <figcaption>Directed Acyclic Graph</figcaption>
+</figure>
+:::
+
+</div>
+
+
+### Choosing Tools
+
+<div class="v-centered">
+
+::: {.column width = "30%"}
+- GUI vs scripting
+  - Ease of use
+  - Open source
+  - Free (and free)
+  - Versatility
+- Scripting
+  - R
+  - Python
+  - Julia...
+:::
+
+::: {.column width = "70%"}
+<figure>
+  <img src="assets/languages.png" alt="Chart showing most popular languages, python is at the top, R is third behind SQL" style="width: 100%; border: 2px solid #000;">
+  <figcaption>Anaconda State of Data Science 2021</figcaption>
+</figure>
+:::
+
+</div>
+
+
+### Exploratory Data Analysis
+
+<div class="v-centered">
+
+::: {.column width = "40%"}
+- Explore:
+  - Distributions
+  - Missing data
+  - Outliers
+- Problems
+  - HARKing
+  - P-hacking
+- Hypothesis generation
+:::
+
+::: {.column width = "60%"}
+<figure>
+  <img src="assets/anscombe.png" alt="Description of image" style="width: 100%; border: 2px solid #000;">
+  <figcaption>Anscombe Plots [@anscombe1973GraphsStatisticalAnalysis]</figcaption>
+</figure>
+:::
+
+</div>
+
+
+### Reproducibility 
+
+<div class="v-centered">
+
+::: {.column width = "40%"}
+- Reproducibility
+  - Make sure your code runs [@trisovic2022LargescaleStudyResearch]
+  - Operating systems
+  - Dependency hell
+- Open datasets
+  - UVM Dataverse [dataverse.uvm.edu](https://dataverse.uvm.edu/)
+  - Figshare [figshare.com](https://figshare.com/)
+  - Zenodo [zenodo.org](https://zenodo.org/)
+- Version control
+  - GitHub
+  - UVM GitLab
+:::
+
+::: {.column width = "60%"}
+<figure>
+  <img src="assets/git.png" alt="Description of image" style="width: 100%; border: 2px solid #000;">
+  <figcaption>Git branching diagram</figcaption>
+</figure>
+:::
+
+</div>
+
+
+### Getting Help
+
+<div class="v-centered">
+
+::: {.column width = "50%"}
+- Resources
+  - Documentation
+  - E-books
+  - DataCamp and friends
+  - Videos
+  - Just dig into something
+- Maria Sckolnick, statistical design and data specialist
+- Use AI scrupulously 
+- Use each other!
+:::
+
+::: {.column width = "50%"}
+<figure>
+  <img src="assets/ebooks.png" alt="Description of image" style="width: 100%; border: 2px solid #000;">
+  <figcaption>
+    <a href="https://wesmckinney.com/book/">Python for Data Analysis, 3E</a>
+    <a href="https://r4ds.hadley.nz/">R for Data Science (2e)</a>
+  </figcaption>
+</figure>
+:::
+
+</div>
+
+::::
+
+::: {.notes}
+- Choosing tools
+  - Highly recommend a free, open source scripting language
+  - Which one? Doesn't really matter
+    - All so good
+    - Mostly about doing things, not how
+    - Depends on lab
+    - Will learn more anyway
+- EDA
+  - Why do we want to look at our data
+    - What goes wrong if we don't?
+  - What is Harking, p-hacking?
+  - Get to know your data
+    - Juvenile detention example
+    - Words in survey example
+    - Missing data example
+- Planning ahead
+  - What is power? Power as ethics
+  - Whiteboard - DAGs and Berksen's paradox
+  - Who knows what pre-registration is?
+- Reproducibility
+  - What is it, vs replication
+  - As internal validity
+- Closing thoughts
+  - Participatory modeling
+  - Even if you're not going to do quant analysis, you have to know enough to critically consume
+:::
+
+
+# 3. Food Systems Data Survey {.centered-section}
+
+## Introduction {.smaller}
+
+<div class="v-centered">
+
+::: {.column width = "50%"}
+- Food systems
+  - One third of global GHG emissions [@crippa2021FoodSystemsAre]
+  - 42% of world's employment [@giller2021FutureFarmingWho]
+  - Vulnerable to climate change [@ortiz-bobea2021AnthropogenicClimateChange]
+- Food system sustainability
+  - Value in monitoring [@fanzo2021ViewpointRigorousMonitoring]
+  - Indicator frameworks [@schneider2023StateFoodSystems,@bene2019GlobalMapIndicators,@chaudhary2018MultiindicatorSustainabilityAssessment]
+- Sustainability Metrics [@wiltshire2024RegionalFoodSystema]
+- Research questions:
+  - What data are available to represent the food system in the Northeast US?
+  - How well do secondary metrics represent the region?
+  - What are the trends and characteristics of the available data?
+:::
+
+::: {.column width = "50%"}
+<figure>
+  <img src="assets/framework.png" alt="Chart of environment dimension" style="width: 100%; border: 2px solid #000;">
+  <figcaption>Dimension, indices, and indicators for the Environment dimension (left to right)</figcaption>
+</figure>
+:::
+
+</div>
+
+
+## Methods {.smaller}
+
+<div class="v-centered">
+
+::: {.column width = "50%"}
+- Survey of sources
+  - Federal, academic, non-profit, citizen science
+  - County-level data if possible
+  - Compile data beginning in 2000
+- Analysis
+  - Coverage by dimension, geography, time
+  - Correlations
+  - Spatial regression
+    - $\Large y = X\beta + u$
+    - $\Large u = \lambda Wu + \epsilon$
+:::
+
+::: {.column width = "50%"}
+<figure>
+  <img src="assets/sources.png" alt="Logos of primary data sources" style="width: 100%; border: 2px solid #000;">
+  <figcaption>Primary data sources</figcaption>
+</figure>
+:::
+
+</div>
+
+::: {.notes}
+* $y$ are normalized metric values
+* $X$ is an $n * k$ matrix
+* $\beta$ is a vector of predictors
+* $u$ is the spatial autocorrelation error term
+* $\lambda$ is the spatial error parameter
+* $W$ is the county weights matrix
+* $\epsilon$ is the error term.
+:::
+
+## Results and Discussion {.smaller}
+
+:::: {.panel-tabset}
+
+### Coverage
+
+<div class="v-centered">
+
+::: {.column width = "40%" .nonincremental}
+- Increasing data availability over time
+  - Big additions to NASS Census in 2017
+- Uneven dimensions
+  - Lots of data for Environment, Economics
+  - Very little for Social
+- Scant missing data, no clear patterns
+:::
+
+::: {.column width = "60%"}
+<figure>
+  <img src="assets/fig_indicator_coverage.png" alt="Graph of indicator representation over time" style="width: 100%; border: 2px solid #000;">
+  <figcaption>Indicators represented by dimension over time.</figcaption>
+</figure>
+:::
+
+</div>
+
+
+### Interactions
+
+<div class="v-centered">
+
+::: {.column width = "40%" .nonincremental}
+- Correlations within Health, but few others
+- Few cross-correlations between dimensions
+- Sparser correlations than theory suggests [@schneider2025GovernanceResilienceEntry]
+- Implications for inference, 
+:::
+
+::: {.column width = "60%"}
+<div class="centered" style="padding-left: 30px;">
+<figure>
+<img src="assets/fig_corplot.png" alt="Correlation matrix" style="width: 80%; border: 2px solid #000;">
+<figcaption>Spearman correlations of county-level data using latest available time points</figcaption>
+</figure>
+</div>
+:::
+
+</div>
+
+
+### Trends
+
+<div class="v-centered">
+
+::: {.column width = "25%" .nonincremental}
+- Of 32 metrics at the county level:
+  - 46.9% were improving
+  - 31.2% were declining
+  - 31.2% stable
+:::
+
+::: {.column width = "75%"}
+<figure>
+  <img src="assets/regression.png" alt="Logos of primary data sources" style="width: 100%; border: 2px solid #000;">
+  <figcaption>Coefficient estimates from spatial regressions of year on normalized metric values.</figcaption>
+</figure>
+:::
+
+</div>
+
+::::
+
+## Conclusions {.smaller}
+
+<div class="v-centered">
+
+::: {.column width = "40%"}
+- Use gaps as a roadmap for monitoring efforts
+  - Development of metrics of social sustainability
+  - Collect fine resolution data
+- Value of FAIR data [@wilkinson2016FAIRGuidingPrinciples]
+  - Frameworks for funding, distrbution of benefits
+  - Well-documented protocols for access, transfer
+  - Backward compatibility
+- Paramaterize food systems models with meaningful data
+  - Who counts as a farmer? [@secchi2025WhoAmericanFarmer]
+  - Data should the represent system
+:::
+
+::: {.column width = "60%" .nonincremental}
+<figure>
+  <img src="assets/social.png" alt="Social dimension graph" style="width: 100%; border: 2px solid #000;">
+  <figcaption>Dimensions, indices, indicators, and metrics for the Social dimension (left to right)</figcaption>
+</figure>
+:::
+
+</div>
+
+::: {.notes}
+- Who counts as a farmer
+  - Changes in definition in last two NASS census: looks like operators are more diverse, but really counted more than just principal operators
+  - $1000: cannot distinguished SDWLR socially disadantaged and limited resource farms from lifestyle, tax haven operations
+  - Masks farm consolidation trend
+  - Family farm - westward expansion, hetero normative vision of a nuclear family
+- Data should respresent system
+  - ARMS does not apply to VT
+  - Small, diversified veg, dairy
+  - Bias toward big ag states, populated counties
+:::
+
+## Thanks! {.smaller}
+
+<div class="v-centered">
+
+::: {.column width = "45%" .nonincremental}
+* Explore the data and analyses:
+  * [SMdocs Website](https://fsrc.w3.uvm.edu/sustainability_metrics/pages/index.html)
+  * [SMexplorer App](https://fsrc.w3.uvm.edu/SMexplorer/)
+* Reach out:
+  * Email: [christopher.donovan@uvm.edu](mailto:christopher.donovan@uvm.edu)
+  * Campus: Leahy 327 (best to email first)
+* Come to the next Food and Ideas Gathering!
+  * Hosted by Sarra Talib, Food Systems PhD Candidate
+  * Panel on food waste with local businesses
+  * November 14th, Leahy 102, 3:00pm
+:::
+
+::: {.column width = "55%"}
+<figure>
+  <img src="assets/thanks.png" alt="FSRI and USDA logos" style="width: 100%; border: 2px solid #000;">
+</figure>
+:::
+
+</div>
+
+## References
