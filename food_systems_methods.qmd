@@ -69,6 +69,7 @@ include-in-header:
 :::
 
 ::: {.column width = '45%'}
+::: {.fragment .fade-in}
 <figure>
   <img src="assets/mui_models.png" alt="Description of image" style="width: 100%; border: 2px solid #000;">
   <figcaption>Models identified from a review of studies on retail food environments [@mui2025SimulatedRetailFood]</figcaption>
@@ -76,8 +77,9 @@ include-in-header:
 
 <figure>
   <img src="assets/monasterolo_acsm.png" alt="Description of image" style="width: 100%; border: 2px solid #000;">
-  <figcaption>Share of publications over time in Agricultural complex system modeling [@monasterolo2016SustainableInclusiveFood]</figcaption>
+  <figcaption>Share of publications over time in agricultural complex system modeling [@monasterolo2016SustainableInclusiveFood]</figcaption>
 </figure>
+:::
 :::
 
 </div>
@@ -209,6 +211,8 @@ plt.show()
 
 ```{python}
 #| label: misleading_viz
+#| include: false
+#| eval: false
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
@@ -252,6 +256,10 @@ ax3d.set_zlabel('Value')
 plt.show()
 ```
 
+<figure>
+    <img src="assets/bad_plots.png" alt="Graph of p values and posteriors" style="width: 95%; border: 2px solid #000;">
+</figure>
+
 </div>
 
 :::
@@ -289,9 +297,14 @@ plt.show()
 ::: {.notes}
 - P values
   - What is a p value, what is it good for? What does it mean?
+  - Assuming null hypothesis, chances of obtaining test results at least as extreme as observed
   - It gives: chance of the data given the null
   - We want: chance of the null given the data
   - Can have significant p, chances are you're wrong!
+  - Point: need to understand to be critical
+- Confidence intervals and SDs
+  - CI: variation or dispersion of data
+  - SE: standard deviation of sampling distribution (measure of variation of samples)
 - Not to mention:
   - Confounders - control for them, but not the wrong ones. Berksens paradox
   - Simpson's paradox
@@ -312,13 +325,13 @@ plt.show()
 <div class="v-centered">
 
 ::: {.column width = "50%"}
+- Whiteboard exercise
+  - What other variables are relevant?
+  - Directed acyclic graph (DAG)
 - Think about:
   - Power
   - Sample size
   - Outliers
-- Whiteboard exercise
-  - What other variables are relevant?
-  - Directed acyclic graph (DAG)
 - Consider preregistration [@nosek2018PreregistrationRevolution]
 :::
 
@@ -339,13 +352,17 @@ plt.show()
 ::: {.column width = "30%"}
 - GUI vs scripting
   - Ease of use
-  - Open source
-  - Free (and free)
+  - Reproducibility
   - Versatility
+- Also consider
+  - Source
+  - Price
+  - Freedom
 - Scripting
   - R
   - Python
-  - Julia...
+  - Julia
+  - Many more
 :::
 
 ::: {.column width = "70%"}
@@ -370,12 +387,12 @@ plt.show()
 - Problems
   - HARKing
   - P-hacking
-- Hypothesis generation
+- Hypothesis generation vs testing
 :::
 
 ::: {.column width = "60%"}
 <figure>
-  <img src="assets/anscombe.png" alt="Description of image" style="width: 100%; border: 2px solid #000;">
+  <img src="assets/anscombe.png" alt="Description of image" style="width: 85%; border: 2px solid #000;">
   <figcaption>Anscombe Plots [@anscombe1973GraphsStatisticalAnalysis]</figcaption>
 </figure>
 :::
@@ -392,7 +409,7 @@ plt.show()
   - Make sure your code runs [@trisovic2022LargescaleStudyResearch]
   - Operating systems
   - Dependency hell
-- Open datasets
+- Replication
   - UVM Dataverse [dataverse.uvm.edu](https://dataverse.uvm.edu/)
   - Figshare [figshare.com](https://figshare.com/)
   - Zenodo [zenodo.org](https://zenodo.org/)
@@ -442,11 +459,15 @@ plt.show()
 ::::
 
 ::: {.notes}
+- Planning
+  - Make your biases, assumptions, worldview visible
 - Choosing tools
   - Highly recommend a free, open source scripting language
   - Which one? Doesn't really matter
     - All so good
     - Mostly about doing things, not how
+    - Planning
+  - Make your biases, assumptions, worldview visible
     - Depends on lab
     - Will learn more anyway
 - EDA
@@ -549,9 +570,9 @@ plt.show()
 - Increasing data availability over time
   - Big additions to NASS Census in 2017
 - Uneven dimensions
-  - Lots of data for Environment, Economics
-  - Very little for Social
-- Scant missing data, no clear patterns
+  - All Economics and Health indicators are represented
+  - 60% of Social indicators have no available data
+- No distinct patterns of missingness by geography
 :::
 
 ::: {.column width = "60%"}
@@ -571,8 +592,9 @@ plt.show()
 ::: {.column width = "40%" .nonincremental}
 - Correlations within Health, but few others
 - Few cross-correlations between dimensions
-- Sparser correlations than theory suggests [@schneider2025GovernanceResilienceEntry]
-- Implications for inference, 
+- Sparser correlations than theory suggests [@bene2019GlobalMapIndicators,@schneider2025GovernanceResilienceEntry]
+- Implications for inference
+  - Compensability and tradeoffs
 :::
 
 ::: {.column width = "60%"}
@@ -609,6 +631,14 @@ plt.show()
 
 ::::
 
+::: {.notes}
+* Interactions
+  * Implications for inference
+    * Does it capture tradeoffs?
+    * Might be at very different scales
+:::
+
+
 ## Conclusions {.smaller}
 
 <div class="v-centered">
@@ -624,6 +654,7 @@ plt.show()
 - Paramaterize food systems models with meaningful data
   - Who counts as a farmer? [@secchi2025WhoAmericanFarmer]
   - Data should the represent system
+  - Appropriate scales of analysis
 :::
 
 ::: {.column width = "60%" .nonincremental}
